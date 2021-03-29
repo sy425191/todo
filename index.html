@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://w3schools.com/w3css/4/w3.css" rel="stylesheet"> 
+    <title>My todo Web app</title>
+
+    <style>
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+
+ul li {
+  cursor: pointer;
+  position: relative;
+  padding: 12px 8px 12px 40px;
+  list-style-type: none;
+  background: #eee;
+  font-size: 18px;
+  transition: 0.2s;
+  
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+ul li p{
+  font-weight: bold;
+}
+
+ul li:nth-child(odd) {
+  background: #f9f9f9;
+}
+
+
+ul li:hover {
+  background: #ddd;
+
+}
+.checked{
+  text-decoration: line-through;
+  font-weight: normal;
+  background-color: rgb(228, 121, 187)!important;
+}
+.checked::before {
+  content: '';
+  position: absolute;
+  border-color: #fff;
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 16px;
+  transform: rotate(45deg);
+  height: 15px;
+  width: 7px;
+}
+.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 12px 16px 12px 16px;
+}
+
+.close:hover {
+  background-color: #f44336;
+  color: white;
+}
+
+
+    </style>
+</head>
+<body>
+
+<div class="container w3-green w3-center w3-large w3-margin">
+    <br><br>
+<h1>
+    My To-do list
+</h1>
+<br>
+<form class="w3-center">
+    <center>
+<input id="myInputtitle"  placeholder="Enter name of task" class="w3-center w3-input" style="width: 50%;">
+<textarea id="myInput" placeholder="Enter description" class="w3-input w3-margin w3-padding w3-center" style="width: 50%;"></textarea>
+<input id="addelement" class="w3-button w3-grey l4 m4 s4" value="Add" name="submit" readonly style="width: 30%;"> </center>
+
+</form>
+<br><br>
+</div>
+
+<ul id="mytodo" class="w3-margin">
+    <!-- <li>first <span class="close"> x </span></li>
+    <li>second <span class="close"> x </span></li> -->
+</ul>
+   
+<script>
+    $(document).ready(function() {
+
+
+  $("#addelement").click(function(){
+    if($("#myInput").val() == ""){
+      alert('Please enter content')
+    }else{
+     $("#mytodo").append("<li> <p>"+$("#myInputtitle").val() + "</p> " +$("#myInput").val() +"<span> \u00D7 </span> </li>");
+     $("li > span").addClass("close");
+    
+    //  var d = new Date();
+    //  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    //  var expires = "expires="+ d.toUTCString();
+     document.cookie = $("#myInputtitle").val()  + "=" + $("#myInput").val() + "; expires=Thu, 18 Dec 2093 12:00:00 UTC;path=/";
+     $("#myInput").val('');
+     $("#myInputtitle").val('');
+  }
+  });
+
+  $(document).on('click', 'li', function(){
+  if($(this).hasClass("checked") == true){
+    $(this).removeClass("checked");
+  }else{
+    $(this).addClass("checked");
+  }
+  });
+
+  $(document).on('click', 'span', function(){
+    $(this).parent().css({"display":"none"});
+    var cookie_name = $(this).parent().children("p").html();
+    console.log(cookie_name);
+    document.cookie = cookie_name + "=" + $("#myInput").val() + "; expires=Thu, 18 Dec 2013 12:00:00 UTC;path=/";
+  });
+
+  var cookies = document.cookie.split(';');
+  if(document.cookie.length > 0){
+  for(var i = 0; i < cookies.length; i++){
+    var name = cookies[i].split("=");
+    $("#mytodo").append("<li> <p>"+name[0] + "</p>"+ name[1] +" <span> \u00D7 </span> </li>");
+     $("li > span").addClass("close");
+     
+  }
+  
+  }
+  else{
+    alert('chill.. No Works pending');
+  }
+
+
+});
+</script>
+</body>
+</html>
